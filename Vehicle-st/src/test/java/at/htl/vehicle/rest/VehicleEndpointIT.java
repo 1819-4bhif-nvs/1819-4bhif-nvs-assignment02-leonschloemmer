@@ -14,10 +14,10 @@ import javax.ws.rs.core.Response;
 //import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.core.IsNot.not;
 
 public class VehicleEndpointIT {
@@ -31,7 +31,7 @@ public class VehicleEndpointIT {
     }
 
     @Test
-    public void fetchVehicle(){
+    public void crud(){
         Response response = this.target.request(MediaType.APPLICATION_JSON).get();
         assertThat(response.getStatus(), is(200));
         JsonArray payload = response.readEntity(JsonArray.class);
@@ -39,8 +39,8 @@ public class VehicleEndpointIT {
         assertThat(payload, not(empty()));
 
         JsonObject vehicle = payload.getJsonObject(0);
-        assertThat(vehicle.getString("brand"), is("Mercedes 42"));
-        assertThat(vehicle.getString("type"), is("A-Class"));
+        assertThat(vehicle.getString("brand"), equalTo("Mercedes 42"));
+        assertThat(vehicle.getString("type"), startsWith("A-Class"));
 
         //GET with id
         JsonObject dedicatedVehicle = this.target
